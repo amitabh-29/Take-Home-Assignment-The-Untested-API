@@ -25,7 +25,12 @@ const getStats = () => {
     }
   });
 
-  return { ...counts, overdue };
+  return {
+    total: tasks.length,
+    // THIS FIXES THE TEST FAILURE
+     ...counts,
+      overdue
+     };
 };
 
 const create = ({ title, description = '', status = 'todo', priority = 'medium', dueDate = null }) => {
@@ -80,6 +85,14 @@ const _reset = () => {
   tasks = [];
 };
 
+const assignTask = (id, assignee) => {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return null;
+    task.assignee = assignee;
+    task.updatedAt = new Date().toISOString();
+    return task;
+};
+
 module.exports = {
   getAll,
   findById,
@@ -90,5 +103,6 @@ module.exports = {
   update,
   remove,
   completeTask,
+  assignTask,
   _reset,
 };
